@@ -6,7 +6,6 @@ namespace Camera
 {
     public class CameraMover : MonoBehaviour
     {
-        [SerializeField] private float transitionTime = 0.5f;
         [SerializeField] private float sensitivity = 0.5f;
         private CameraBase _camera;
         private IInputWatcher _inputWatcher;
@@ -22,13 +21,13 @@ namespace Camera
             _inputWatcher.DragDeltaChanged += DragDeltaChangedEventHandler;
             _inputWatcher.DragEnded += DragEndedEventHandler;
             _inputWatcher.Initialize();
-            _positionController = new PositionController(_camera, sensitivity, transitionTime);
+            _positionController = new PositionController(_camera, sensitivity);
         }
         
         private void DragStartedEventHandler()
         {
             LogInfo(nameof(DragStartedEventHandler));
-            _positionController.PinPosition();
+            _positionController.StartTransition();
         }
 
         private void DragDeltaChangedEventHandler(Vector3 delta)
@@ -39,7 +38,7 @@ namespace Camera
         private void DragEndedEventHandler()
         {
             LogInfo(nameof(DragEndedEventHandler));
-            _positionController.UnpinPosition();
+            _positionController.StopTransition();
         }
 
         private void OnDestroy()
@@ -49,7 +48,6 @@ namespace Camera
             _inputWatcher.DragDeltaChanged -= DragDeltaChangedEventHandler;
             _inputWatcher.DragEnded -= DragEndedEventHandler;
             _inputWatcher.Dispose();
-            _positionController.Dispose();
         }
 
         private void LogInfo(string message)
