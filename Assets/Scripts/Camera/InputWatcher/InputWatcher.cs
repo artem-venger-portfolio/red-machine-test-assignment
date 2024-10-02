@@ -1,3 +1,4 @@
+using System;
 using Player;
 using Player.ActionHandlers;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace Camera
         {
             _clickHandler = clickHandler;
         }
+
+        public event Action<Vector3> TargetPositionChanged;
         
         public void Initialize()
         {
@@ -45,8 +48,14 @@ namespace Camera
         {
             if (IsDragging == false)
                 return;
-            
+
+            var previousPosition = _targetPosition;
             _targetPosition = position;
+
+            if (previousPosition == _targetPosition)
+            {
+                TargetPositionChanged?.Invoke(_targetPosition);
+            }
         }
 
         private void OnDragEnd(Vector3 finishPosition)
