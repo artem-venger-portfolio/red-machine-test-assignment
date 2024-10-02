@@ -10,6 +10,7 @@ namespace Camera
     {
         private readonly ClickHandler _clickHandler;
         private readonly CameraBase _cameraBase;
+        private Vector3 _aspectRationMultiplier;
         private Vector3 _targetPosition;
         private bool _isDragging;
 
@@ -29,6 +30,7 @@ namespace Camera
             _clickHandler.DragStartEvent += OnDragStart;
             _clickHandler.DragUpdateEvent += OnDragUpdate;
             _clickHandler.DragEndEvent += OnDragEnd;
+            _aspectRationMultiplier = new Vector3((float)Screen.width / Screen.height, 1, 1);
         }
 
         public void Dispose()
@@ -61,7 +63,8 @@ namespace Camera
             var arePositionsEqual = Mathf.Approximately(delta.magnitude, 0);
             if (arePositionsEqual == false)
             {
-                DragDeltaChanged?.Invoke(delta);
+                var scaledDelta = Vector3.Scale(delta, _aspectRationMultiplier);
+                DragDeltaChanged?.Invoke(scaledDelta);
             }
         }
 
@@ -76,14 +79,8 @@ namespace Camera
         
         private void SetTargetPositionInWorldSpace(Vector3 positionWorld)
         {
-            var positionViewPort = WorldToViewportPoint(positionWorld);
-            _targetPosition = positionViewPort;
+            _targetPosition = _cameraBase.WorldToViewportPoint(positionWorld);
             _targetPosition.z = 0;
-        }
-        
-        private Vector3 WorldToViewportPoint(Vector3 position)
-        {
-            return _cameraBase.WorldToViewportPoint(position);
         }
         
         private static bool IsConnecting => PlayerController.PlayerState == PlayerState.Connecting;
