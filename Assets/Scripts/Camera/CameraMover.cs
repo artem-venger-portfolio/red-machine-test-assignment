@@ -10,6 +10,8 @@ namespace Camera
         private CameraBase _camera;
         private ClickHandler _clickHandler;
         private bool _isDragging;
+        private Vector3 _startPosition;
+        private Vector3 _targetPosition;
         
         private void Awake()
         {
@@ -17,6 +19,7 @@ namespace Camera
             _camera = CameraHolder.Instance.MainCamera;
             _clickHandler = ClickHandler.Instance;
             _clickHandler.DragStartEvent += OnDragStart;
+            _clickHandler.DragUpdateEvent += OnDragUpdate;
             _clickHandler.DragEndEvent += OnDragEnd;
         }
 
@@ -26,6 +29,15 @@ namespace Camera
                 return;
             
             IsDragging = true;
+            _startPosition = startPosition;
+        }
+        
+        private void OnDragUpdate(Vector3 position)
+        {
+            if (IsDragging == false)
+                return;
+            
+            _targetPosition = position;
         }
 
         private void OnDragEnd(Vector3 finishPosition)
