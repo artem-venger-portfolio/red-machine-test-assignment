@@ -18,7 +18,7 @@ namespace Camera
             _clickHandler = clickHandler;
         }
 
-        public event Action<Vector3> TargetPositionChanged;
+        public event Action<Vector3> DragDeltaChanged;
         
         public void Initialize()
         {
@@ -54,7 +54,8 @@ namespace Camera
 
             if (previousPosition == _targetPosition)
             {
-                TargetPositionChanged?.Invoke(_targetPosition);
+                var delta = _targetPosition - _startPosition;
+                DragDeltaChanged?.Invoke(delta);
             }
         }
 

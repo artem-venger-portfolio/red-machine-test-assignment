@@ -7,6 +7,6 @@ namespace Camera
     {
         void Initialize();
         void Dispose();
-        event Action<Vector3> TargetPositionChanged;
+        event Action<Vector3> DragDeltaChanged;
     }
 }
