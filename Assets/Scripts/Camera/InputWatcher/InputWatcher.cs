@@ -60,12 +60,8 @@ namespace Camera
             SetTargetPositionInWorldSpace(position);
 
             var delta = _targetPosition - previousPosition;
-            var arePositionsEqual = Mathf.Approximately(delta.magnitude, 0);
-            if (arePositionsEqual == false)
-            {
-                var scaledDelta = Vector3.Scale(delta, _aspectRationMultiplier);
-                DragDeltaChanged?.Invoke(scaledDelta);
-            }
+            var scaledDelta = Vector3.Scale(delta, _aspectRationMultiplier);
+            DragDeltaChanged?.Invoke(scaledDelta);
         }
 
         private void OnDragEnd(Vector3 finishPosition)

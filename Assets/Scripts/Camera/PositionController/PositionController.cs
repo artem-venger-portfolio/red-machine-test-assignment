@@ -26,7 +26,6 @@ namespace Camera
 
         public void ChangeDelta(Vector3 delta)
         {
-            LogInfo($"{nameof(ChangeDelta)}: {delta}");
             CameraPosition += -delta * _sensitivity;
             
             var previousLastUpdateTime = _lastUpdateTime;
