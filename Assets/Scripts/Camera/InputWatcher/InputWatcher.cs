@@ -36,6 +36,7 @@ namespace Camera
         {
             LogInfo(nameof(Dispose));
             _clickHandler.DragStartEvent -= OnDragStart;
+            _clickHandler.DragUpdateEvent -= OnDragUpdate;
             _clickHandler.DragEndEvent -= OnDragEnd;
         }
         
