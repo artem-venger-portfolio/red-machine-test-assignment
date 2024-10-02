@@ -14,6 +14,7 @@ namespace Player.ActionHandlers
         public event Action<Vector3> ClickEvent;
         public event Action<Vector3> PointerUpEvent;
         public event Action<Vector3> DragStartEvent;
+        public event Action<Vector3> DragUpdateEvent; 
         public event Action<Vector3> DragEndEvent;
 
         private Vector3 _pointerDownPosition;
@@ -30,7 +31,7 @@ namespace Player.ActionHandlers
                 _isClick = true;
                 _clickHoldDuration = .0f;
 
-                _pointerDownPosition = CameraHolder.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
+                _pointerDownPosition = GetWorldMousePosition();
                 
                 PointerDownEvent?.Invoke(_pointerDownPosition);
                 
@@ -38,7 +39,7 @@ namespace Player.ActionHandlers
             }
             else if (Input.GetMouseButtonUp(0))
             {
-                var pointerUpPosition = CameraHolder.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
+                var pointerUpPosition = GetWorldMousePosition();
                     
                 if (_isDrag)
                 {
@@ -55,6 +56,16 @@ namespace Player.ActionHandlers
 
                 _isClick = false;
             }
+
+            if (_isDrag)
+            {
+                DragUpdateEvent?.Invoke(GetWorldMousePosition());
+            }
+        }
+
+        private static Vector3 GetWorldMousePosition()
+        {
+            return CameraHolder.Instance.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         }
 
         private void LateUpdate()
