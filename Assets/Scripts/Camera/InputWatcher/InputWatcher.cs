@@ -63,6 +63,7 @@ namespace Camera
             if (arePositionsEqual == false)
             {
                 var delta = _targetPosition - _startPosition;
+                delta.z = 0;
                 DragDeltaChanged?.Invoke(delta);
             }
         }
