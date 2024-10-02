@@ -7,6 +7,7 @@ namespace Camera
     public class CameraMover : MonoBehaviour
     {
         [SerializeField] private float transitionTime = 0.5f;
+        [SerializeField] private float sensitivity = 0.5f;
         private CameraBase _camera;
         private IInputWatcher _inputWatcher;
 
@@ -19,7 +20,7 @@ namespace Camera
             _inputWatcher = new InputWatcher(ClickHandler.Instance);
             _inputWatcher.DragDeltaChanged += DragDeltaChangedEventHandler;
             _inputWatcher.Initialize();
-            _positionController = new PositionController(_camera, transitionTime);
+            _positionController = new PositionController(_camera, sensitivity, transitionTime);
         }
         
         private void DragDeltaChangedEventHandler(Vector3 delta)

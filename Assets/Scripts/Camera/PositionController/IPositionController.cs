@@ -4,7 +4,9 @@ namespace Camera
 {
     public interface IPositionController
     {
-        void MoveTo(Vector3 position);
         void Dispose();
+        void PinPosition();
+        void ChangeDelta(Vector3 delta);
+        void UnpinPosition();
     }
 }

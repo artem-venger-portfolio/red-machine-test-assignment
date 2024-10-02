@@ -8,24 +8,39 @@ namespace Camera
     public class PositionController : IPositionController
     {
         private readonly CameraBase _camera;
+        private readonly float _sensitivity;
         private readonly Coroutines _coroutineManager;
         private readonly float _transitionTime;
+        private Vector3 _pinnedPosition;
         private Coroutine _moveCoroutine;
 
-        public PositionController(CameraBase camera, float transitionTime)
+        public PositionController(CameraBase camera, float sensitivity, float transitionTime)
         {
             _camera = camera;
+            _sensitivity = sensitivity;
             _transitionTime = transitionTime;
             _coroutineManager = Coroutines.Instance;
         }
-
-        public void MoveTo(Vector3 position)
+        
+        public void PinPosition()
         {
-            LogInfo($"{nameof(MoveTo)}: {position}");
+            LogInfo(nameof(PinPosition));
+            _pinnedPosition = CameraPosition;
+        }
+        
+        public void ChangeDelta(Vector3 delta)
+        {
+            LogInfo($"{nameof(ChangeDelta)}: {delta}");
             StopCurrentTransitionIfPossible();
-
-            var moveCoroutine = GetMoveCoroutine(position);
+            var targetPosition = _pinnedPosition + delta * _sensitivity;
+            var moveCoroutine = GetMoveCoroutine(targetPosition);
             _moveCoroutine = _coroutineManager.StartCoroutine(moveCoroutine);
+        }
+
+        public void UnpinPosition()
+        {
+            LogInfo(nameof(UnpinPosition));
+            _pinnedPosition = Vector3.zero;
         }
 
         public void Dispose()
@@ -36,18 +51,27 @@ namespace Camera
 
         private void StopCurrentTransitionIfPossible()
         {
-            if (_moveCoroutine != null) _coroutineManager.StopCoroutine(_moveCoroutine);
+            if (_moveCoroutine != null)
+            {
+                _coroutineManager.StopCoroutine(_moveCoroutine);
+            } 
+        }
+        
+        private Vector3 CameraPosition
+        {
+            get => _camera.Position;
+            set => _camera.Position = value;
         }
 
         private IEnumerator GetMoveCoroutine(Vector3 position)
         {
-            var startPosition = _camera.Position;
+            var startPosition = CameraPosition;
             var elapsedTime = 0f;
 
             while (elapsedTime < _transitionTime)
             {
                 elapsedTime += Time.deltaTime;
-                _camera.Position = Vector3.Lerp(startPosition, position, elapsedTime / _transitionTime);
+                CameraPosition = Vector3.Lerp(startPosition, position, elapsedTime / _transitionTime);
                 yield return null;
             }
 
