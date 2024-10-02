@@ -10,7 +10,6 @@ namespace Camera
         private readonly CameraBase _camera;
         private readonly float _sensitivity;
         private readonly float _transitionTime;
-        private float _lastUpdateTime;
         private Vector3 _speed;
 
         public PositionController(CameraBase camera, float sensitivity)
@@ -27,11 +26,7 @@ namespace Camera
         public void ChangeDelta(Vector3 delta)
         {
             CameraPosition += -delta * _sensitivity;
-            
-            var previousLastUpdateTime = _lastUpdateTime;
-            _lastUpdateTime = Time.time;
-            var deltaTime = _lastUpdateTime - previousLastUpdateTime;
-            _speed = delta / deltaTime;
+            _speed = delta / Time.deltaTime;
         }
 
         public void StopTransition()
