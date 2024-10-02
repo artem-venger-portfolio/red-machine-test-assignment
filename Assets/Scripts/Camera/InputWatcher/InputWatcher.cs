@@ -58,7 +58,9 @@ namespace Camera
             var previousPosition = _targetPosition;
             _targetPosition = WorldToViewportPoint(position);
 
-            if (previousPosition == _targetPosition)
+            var positionsDistance = Vector3.Distance(previousPosition, _targetPosition);
+            var arePositionsEqual = Mathf.Approximately(positionsDistance, 0);
+            if (arePositionsEqual == false)
             {
                 var delta = _targetPosition - _startPosition;
                 DragDeltaChanged?.Invoke(delta);
