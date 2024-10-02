@@ -32,7 +32,7 @@ namespace Camera
         {
             LogInfo($"{nameof(ChangeDelta)}: {delta}");
             StopCurrentTransitionIfPossible();
-            var targetPosition = _pinnedPosition + delta * _sensitivity;
+            var targetPosition = _pinnedPosition + -delta * _sensitivity;
             var moveCoroutine = GetMoveCoroutine(targetPosition);
             _moveCoroutine = _coroutineManager.StartCoroutine(moveCoroutine);
         }
