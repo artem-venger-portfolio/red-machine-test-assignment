@@ -18,8 +18,10 @@ namespace Camera
             _clickHandler = clickHandler;
         }
 
+        public event Action DragStarted;
         public event Action<Vector3> DragDeltaChanged;
-        
+        public event Action DragEnded;
+
         public void Initialize()
         {
             LogInfo(nameof(Initialize));
@@ -42,6 +44,7 @@ namespace Camera
             
             IsDragging = true;
             _startPosition = startPosition;
+            DragStarted?.Invoke();
         }
         
         private void OnDragUpdate(Vector3 position)
@@ -65,6 +68,7 @@ namespace Camera
                 return;
             
             IsDragging = false;
+            DragEnded?.Invoke();
         }
         
         private static bool IsConnecting => PlayerController.PlayerState == PlayerState.Connecting;
