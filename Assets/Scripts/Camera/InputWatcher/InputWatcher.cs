@@ -10,7 +10,6 @@ namespace Camera
     {
         private readonly ClickHandler _clickHandler;
         private readonly CameraBase _cameraBase;
-        private Vector3 _startPosition;
         private Vector3 _targetPosition;
         private bool _isDragging;
 
@@ -46,7 +45,7 @@ namespace Camera
                 return;
             
             IsDragging = true;
-            _startPosition = WorldToViewportPoint(startPosition);
+            SetTargetPositionInWorldSpace(startPosition);
             DragStarted?.Invoke();
         }
         
@@ -56,14 +55,12 @@ namespace Camera
                 return;
 
             var previousPosition = _targetPosition;
-            _targetPosition = WorldToViewportPoint(position);
+            SetTargetPositionInWorldSpace(position);
 
-            var positionsDistance = Vector3.Distance(previousPosition, _targetPosition);
-            var arePositionsEqual = Mathf.Approximately(positionsDistance, 0);
+            var delta = _targetPosition - previousPosition;
+            var arePositionsEqual = Mathf.Approximately(delta.magnitude, 0);
             if (arePositionsEqual == false)
             {
-                var delta = _targetPosition - _startPosition;
-                delta.z = 0;
                 DragDeltaChanged?.Invoke(delta);
             }
         }
@@ -75,6 +72,13 @@ namespace Camera
             
             IsDragging = false;
             DragEnded?.Invoke();
+        }
+        
+        private void SetTargetPositionInWorldSpace(Vector3 positionWorld)
+        {
+            var positionViewPort = WorldToViewportPoint(positionWorld);
+            _targetPosition = positionViewPort;
+            _targetPosition.z = 0;
         }
         
         private Vector3 WorldToViewportPoint(Vector3 position)
