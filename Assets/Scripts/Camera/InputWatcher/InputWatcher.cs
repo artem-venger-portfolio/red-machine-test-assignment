@@ -9,13 +9,15 @@ namespace Camera
     public class InputWatcher : IInputWatcher
     {
         private readonly ClickHandler _clickHandler;
+        private readonly CameraBase _cameraBase;
         private Vector3 _startPosition;
         private Vector3 _targetPosition;
         private bool _isDragging;
 
-        public InputWatcher(ClickHandler clickHandler)
+        public InputWatcher(ClickHandler clickHandler, CameraBase cameraBase)
         {
             _clickHandler = clickHandler;
+            _cameraBase = cameraBase;
         }
 
         public event Action DragStarted;
@@ -43,7 +45,7 @@ namespace Camera
                 return;
             
             IsDragging = true;
-            _startPosition = startPosition;
+            _startPosition = WorldToViewportPoint(startPosition);
             DragStarted?.Invoke();
         }
         
@@ -53,7 +55,7 @@ namespace Camera
                 return;
 
             var previousPosition = _targetPosition;
-            _targetPosition = position;
+            _targetPosition = WorldToViewportPoint(position);
 
             if (previousPosition == _targetPosition)
             {
@@ -69,6 +71,11 @@ namespace Camera
             
             IsDragging = false;
             DragEnded?.Invoke();
+        }
+        
+        private Vector3 WorldToViewportPoint(Vector3 position)
+        {
+            return _cameraBase.WorldToViewportPoint(position);
         }
         
         private static bool IsConnecting => PlayerController.PlayerState == PlayerState.Connecting;

@@ -6,5 +6,6 @@ namespace Camera
     {
         public abstract Vector3 Position { set; get; }
         public abstract Vector3 ScreenToWorldPoint(Vector3 position);
+        public abstract Vector3 WorldToViewportPoint(Vector3 position);
     }
 }
