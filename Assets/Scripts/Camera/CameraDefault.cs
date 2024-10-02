@@ -7,7 +7,13 @@ namespace Camera
     public class CameraDefault : CameraBase
     {
         private UnityCamera _camera;
-        
+
+        public override Vector3 Position
+        {
+            get => transform.position;
+            set => transform.position = value;
+        }
+
         private void Awake()
         {
             _camera = GetComponent<UnityCamera>();
