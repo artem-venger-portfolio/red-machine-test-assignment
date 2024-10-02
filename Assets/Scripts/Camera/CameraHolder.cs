@@ -5,8 +5,8 @@ namespace Camera
 {
     public class CameraHolder : DontDestroyMonoBehaviourSingleton<CameraHolder>
     {
-        [SerializeField] private UnityEngine.Camera mainCamera;
+        [SerializeField] private CameraBase mainCamera;
         
-        public UnityEngine.Camera MainCamera => mainCamera;
+        public CameraBase MainCamera => mainCamera;
     }
 }
