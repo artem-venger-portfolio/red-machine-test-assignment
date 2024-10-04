@@ -8,30 +8,25 @@ namespace Camera
     public class PositionController : IPositionController
     {
         private readonly CameraBase _camera;
-        private readonly float _sensitivity;
-        private readonly float _transitionTime;
-        private Vector3 _speed;
 
-        public PositionController(CameraBase camera, float sensitivity)
+        public PositionController(CameraBase camera)
         {
             _camera = camera;
-            _sensitivity = sensitivity;
         }
 
         public void StartTransition()
         {
-            
+            LogInfo(nameof(StartTransition));
         }
 
         public void ChangeDelta(Vector3 delta)
         {
-            CameraPosition += -delta * _sensitivity;
-            _speed = delta / Time.deltaTime;
+            CameraPosition += -delta;
         }
 
         public void StopTransition()
         {
-            
+            LogInfo(nameof(StopTransition));
         }
 
         private Vector3 CameraPosition
@@ -39,6 +34,7 @@ namespace Camera
             get => _camera.Position;
             set => _camera.Position = value;
         }
+
         private void LogInfo(string message)
         {
             Log.Info(typeof(PositionController), message);

@@ -6,7 +6,6 @@ namespace Camera
 {
     public class CameraMover : MonoBehaviour
     {
-        [SerializeField] private float sensitivity = 0.5f;
         private CameraBase _camera;
         private IInputWatcher _inputWatcher;
 
@@ -21,7 +20,7 @@ namespace Camera
             _inputWatcher.DragDeltaChanged += DragDeltaChangedEventHandler;
             _inputWatcher.DragEnded += DragEndedEventHandler;
             _inputWatcher.Initialize();
-            _positionController = new PositionController(_camera, sensitivity);
+            _positionController = new PositionController(_camera);
         }
         
         private void DragStartedEventHandler()
