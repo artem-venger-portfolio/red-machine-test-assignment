@@ -16,7 +16,7 @@ namespace Camera
         {
             LogInfo(nameof(Awake));
             _camera = CameraHolder.Instance.MainCamera;
-            _inputWatcher = new InputWatcher(ClickHandler.Instance, _camera);
+            _inputWatcher = new InputWatcher(ClickHandler.Instance);
             _inputWatcher.DragStarted += DragStartedEventHandler;
             _inputWatcher.DragDeltaChanged += DragDeltaChangedEventHandler;
             _inputWatcher.DragEnded += DragEndedEventHandler;

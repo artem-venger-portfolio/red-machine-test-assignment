@@ -9,15 +9,13 @@ namespace Camera
     public class InputWatcher : IInputWatcher
     {
         private readonly ClickHandler _clickHandler;
-        private readonly CameraBase _cameraBase;
-        private Vector3 _aspectRationMultiplier;
         private Vector3 _targetPosition;
+        private Vector3 _startPosition;
         private bool _isDragging;
 
-        public InputWatcher(ClickHandler clickHandler, CameraBase cameraBase)
+        public InputWatcher(ClickHandler clickHandler)
         {
             _clickHandler = clickHandler;
-            _cameraBase = cameraBase;
         }
 
         public event Action DragStarted;
@@ -30,7 +28,6 @@ namespace Camera
             _clickHandler.DragStartEvent += OnDragStart;
             _clickHandler.DragUpdateEvent += OnDragUpdate;
             _clickHandler.DragEndEvent += OnDragEnd;
-            _aspectRationMultiplier = new Vector3((float)Screen.width / Screen.height, 1, 1);
         }
 
         public void Dispose()
@@ -47,7 +44,7 @@ namespace Camera
                 return;
             
             IsDragging = true;
-            SetTargetPositionInWorldSpace(startPosition);
+            _startPosition = startPosition;
             DragStarted?.Invoke();
         }
         
@@ -56,12 +53,13 @@ namespace Camera
             if (IsDragging == false)
                 return;
 
-            var previousPosition = _targetPosition;
-            SetTargetPositionInWorldSpace(position);
-
-            var delta = _targetPosition - previousPosition;
-            var scaledDelta = Vector3.Scale(delta, _aspectRationMultiplier);
-            DragDeltaChanged?.Invoke(scaledDelta);
+            var delta = position - _startPosition;
+            delta.z = 0;
+            var hasMoved = Mathf.Approximately(delta.magnitude, 0) == false;
+            if (hasMoved)
+            {
+                DragDeltaChanged?.Invoke(delta);
+            }
         }
 
         private void OnDragEnd(Vector3 finishPosition)
@@ -73,12 +71,6 @@ namespace Camera
             DragEnded?.Invoke();
         }
         
-        private void SetTargetPositionInWorldSpace(Vector3 positionWorld)
-        {
-            _targetPosition = _cameraBase.WorldToViewportPoint(positionWorld);
-            _targetPosition.z = 0;
-        }
-        
         private static bool IsConnecting => PlayerController.PlayerState == PlayerState.Connecting;
         
         private bool IsDragging
@@ -87,7 +79,7 @@ namespace Camera
             set
             {
                 _isDragging = value;
-                LogInfo($"IsDragging: {value}");
+                LogInfo($"IsDragging: {_isDragging}");
             }
         }
         
