@@ -28,9 +28,10 @@ namespace Camera
 
             if (_transitionCoroutine != null)
             {
-                throw new InvalidOperationException("Transition is already started");
+                _coroutineManager.StopCoroutine(_transitionCoroutine);
             }
 
+            IsFollowing = true;
             _transitionCoroutine = _coroutineManager.StartCoroutine(GetTransitionCoroutine());
         }
 
@@ -42,8 +43,7 @@ namespace Camera
         public void StopTransition()
         {
             LogInfo(nameof(StopTransition));
-            _coroutineManager.StopCoroutine(_transitionCoroutine);
-            _transitionCoroutine = null;
+            IsFollowing = false;
         }
 
         private Vector3 CameraPosition
@@ -52,12 +52,14 @@ namespace Camera
             set => _camera.Position = value;
         }
 
+        private bool IsFollowing { get; set; }
+
         private IEnumerator GetTransitionCoroutine()
         {
             _targetPosition = CameraPosition;
             _velocity = Vector3.zero;
         
-            while (true)
+            while (IsFollowing)
             {
                 var distanceToTarget = Vector3.Distance(CameraPosition, _targetPosition);
                 var isOnTarget = Mathf.Approximately(distanceToTarget, 0);
@@ -68,6 +70,18 @@ namespace Camera
                 
                 yield return null;
             }
+            
+            var acceleration = Vector3.zero;
+            var maxAcceleration = float.PositiveInfinity;
+            while (_velocity.magnitude > 0.5f)
+            {
+                var deltaTime = Time.deltaTime;
+                CameraPosition += _velocity * deltaTime;
+                _velocity = Vector3.SmoothDamp(_velocity, Vector3.zero, ref acceleration, _smoothTime, maxAcceleration, deltaTime);
+                yield return null;
+            }
+            
+            _transitionCoroutine = null;
         }
 
         private void LogInfo(string message)
