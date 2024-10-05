@@ -1,4 +1,3 @@
-using Camera.Config;
 using Player.ActionHandlers;
 using UnityEngine;
 using Utils;

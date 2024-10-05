@@ -1,4 +1,4 @@
-namespace Camera.Config
+namespace Camera
 {
     public interface ICameraConfig
     {

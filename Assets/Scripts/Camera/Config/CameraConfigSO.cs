@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Camera.Config
+namespace Camera
 {
     [CreateAssetMenu(menuName = "RedMachineTest/" + nameof(CameraConfigSO), fileName = nameof(CameraConfigSO))]
     public class CameraConfigSO : ScriptableObject, ICameraConfig

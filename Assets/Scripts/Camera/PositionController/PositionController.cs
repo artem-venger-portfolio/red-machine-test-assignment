@@ -1,5 +1,4 @@
 using System.Collections;
-using Camera.Config;
 using UnityEngine;
 using Utils;
 using Utils.MonoBehaviourUtils;
