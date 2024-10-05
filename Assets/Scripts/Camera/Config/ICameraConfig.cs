@@ -4,5 +4,7 @@ namespace Camera
     {
         public float FollowTime { get; }
         public float DecelerationTime { get; }
+        float FollowDistance { get; }
+        float MinDecelerationVelocity { get; }
     }
 }

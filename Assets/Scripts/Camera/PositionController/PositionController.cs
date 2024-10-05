@@ -70,7 +70,7 @@ namespace Camera
             while (IsFollowing)
             {
                 var distanceToTarget = Vector3.Distance(CameraPosition, _targetPosition);
-                var isOnTarget = Mathf.Approximately(distanceToTarget, 0);
+                var isOnTarget = distanceToTarget < _config.FollowDistance;
                 if (isOnTarget == false)
                 {
                     CameraPosition = Vector3.SmoothDamp(CameraPosition, _targetPosition, ref _velocity, _config.FollowTime);
@@ -81,7 +81,7 @@ namespace Camera
             
             var acceleration = Vector3.zero;
             var maxAcceleration = float.PositiveInfinity;
-            while (_velocity.magnitude > 0.5f)
+            while (_velocity.magnitude > _config.MinDecelerationVelocity)
             {
                 var deltaTime = Time.deltaTime;
                 CameraPosition += _velocity * deltaTime;

@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: CameraConfigSO
   m_EditorClassIdentifier: 
   followTime: 0.1
+  followDistance: 0.000001
   decelerationTime: 0.3
+  minDecelerationVelocity: 0.1
