@@ -11,6 +11,7 @@ namespace Camera
         private readonly ICameraConfig _config;
         private readonly CameraBoundsBase _cameraBounds;
         private readonly CameraBase _camera;
+        private readonly Vector3 _originalCameraPosition;
         private Coroutine _transitionCoroutine;
         private Vector3 _targetPosition;
         private Vector3 _velocity;
@@ -19,6 +20,7 @@ namespace Camera
             CameraBoundsBase cameraBounds)
         {
             _camera = camera;
+            _originalCameraPosition = CameraPosition;
             _coroutineManager = coroutineManager;
             _config = config;
             _cameraBounds = cameraBounds;
@@ -49,6 +51,7 @@ namespace Camera
         {
             LogInfo(nameof(Dispose));
             StopTransitionIfPossible();
+            CameraPosition = _originalCameraPosition;
         }
 
         private Vector3 CameraPosition
