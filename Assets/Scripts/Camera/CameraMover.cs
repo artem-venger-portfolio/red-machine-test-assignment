@@ -23,6 +23,8 @@ namespace Camera
             _inputWatcher.DragDeltaChanged += DragDeltaChangedEventHandler;
             _inputWatcher.DragEnded += DragEndedEventHandler;
             _inputWatcher.Initialize();
+
+            cameraBounds.Initialize(_camera);
             _positionController = new PositionController(_camera, Coroutines.Instance, cameraConfigSO, cameraBounds);
         }
         

@@ -51,7 +51,7 @@ namespace Camera
         private Vector3 CameraPosition
         {
             get => _camera.Position;
-            set => _camera.Position = value;
+            set => _camera.Position = _cameraBounds.CorrectPosition(value);
         }
 
         private bool IsFollowing { get; set; }
