@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50458ba7018444678d94de8d9e34e36d, type: 3}
   m_Name: CameraConfigSO
   m_EditorClassIdentifier: 
-  followTime: 0.3
+  followTime: 0.1
   decelerationTime: 0.3
