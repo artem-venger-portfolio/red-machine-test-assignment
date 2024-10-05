@@ -52,6 +52,7 @@ namespace Camera
             _inputWatcher.DragDeltaChanged -= DragDeltaChangedEventHandler;
             _inputWatcher.DragEnded -= DragEndedEventHandler;
             _inputWatcher.Dispose();
+            _positionController.Dispose();
         }
 
         private void LogInfo(string message)

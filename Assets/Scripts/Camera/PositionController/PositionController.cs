@@ -28,10 +28,7 @@ namespace Camera
         {
             LogInfo(nameof(StartTransition));
 
-            if (_transitionCoroutine != null)
-            {
-                _coroutineManager.StopCoroutine(_transitionCoroutine);
-            }
+            StopTransitionIfPossible();
 
             IsFollowing = true;
             _transitionCoroutine = _coroutineManager.StartCoroutine(GetTransitionCoroutine());
@@ -46,6 +43,12 @@ namespace Camera
         {
             LogInfo(nameof(StopTransition));
             IsFollowing = false;
+        }
+
+        public void Dispose()
+        {
+            LogInfo(nameof(Dispose));
+            StopTransitionIfPossible();
         }
 
         private Vector3 CameraPosition
@@ -84,6 +87,14 @@ namespace Camera
             }
             
             _transitionCoroutine = null;
+        }
+        
+        private void StopTransitionIfPossible()
+        {
+            if (_transitionCoroutine != null)
+            {
+                _coroutineManager.StopCoroutine(_transitionCoroutine);
+            }
         }
 
         private void LogInfo(string message)

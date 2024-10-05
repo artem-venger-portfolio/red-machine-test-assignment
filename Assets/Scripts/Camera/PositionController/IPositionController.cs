@@ -7,5 +7,6 @@ namespace Camera
         void StartTransition();
         void ChangeDelta(Vector3 delta);
         void StopTransition();
+        void Dispose();
     }
 }
