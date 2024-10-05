@@ -1,3 +1,4 @@
+using Camera.Config;
 using Player.ActionHandlers;
 using UnityEngine;
 using Utils;
@@ -7,7 +8,7 @@ namespace Camera
 {
     public class CameraMover : MonoBehaviour
     {
-        [SerializeField] private float _smoothTime = 0.3f;
+        [SerializeField] private CameraConfigSO cameraConfigSO;
 
         private CameraBase _camera;
         private IInputWatcher _inputWatcher;
@@ -22,7 +23,7 @@ namespace Camera
             _inputWatcher.DragDeltaChanged += DragDeltaChangedEventHandler;
             _inputWatcher.DragEnded += DragEndedEventHandler;
             _inputWatcher.Initialize();
-            _positionController = new PositionController(_camera, Coroutines.Instance, _smoothTime);
+            _positionController = new PositionController(_camera, Coroutines.Instance, cameraConfigSO);
         }
         
         private void DragStartedEventHandler()

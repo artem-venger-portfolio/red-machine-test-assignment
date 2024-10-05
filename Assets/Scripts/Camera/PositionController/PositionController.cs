@@ -1,5 +1,5 @@
-using System;
 using System.Collections;
+using Camera.Config;
 using UnityEngine;
 using Utils;
 using Utils.MonoBehaviourUtils;
@@ -9,17 +9,17 @@ namespace Camera
     public class PositionController : IPositionController
     {
         private readonly Coroutines _coroutineManager;
+        private readonly ICameraConfig _config;
         private readonly CameraBase _camera;
-        private readonly float _smoothTime;
         private Coroutine _transitionCoroutine;
         private Vector3 _targetPosition;
         private Vector3 _velocity;
 
-        public PositionController(CameraBase camera, Coroutines coroutineManager, float smoothTime)
+        public PositionController(CameraBase camera, Coroutines coroutineManager, ICameraConfig config)
         {
             _camera = camera;
             _coroutineManager = coroutineManager;
-            _smoothTime = smoothTime;
+            _config = config;
         }
 
         public void StartTransition()
@@ -65,7 +65,7 @@ namespace Camera
                 var isOnTarget = Mathf.Approximately(distanceToTarget, 0);
                 if (isOnTarget == false)
                 {
-                    CameraPosition = Vector3.SmoothDamp(CameraPosition, _targetPosition, ref _velocity, _smoothTime);
+                    CameraPosition = Vector3.SmoothDamp(CameraPosition, _targetPosition, ref _velocity, _config.FollowTime);
                 }
                 
                 yield return null;
@@ -77,7 +77,7 @@ namespace Camera
             {
                 var deltaTime = Time.deltaTime;
                 CameraPosition += _velocity * deltaTime;
-                _velocity = Vector3.SmoothDamp(_velocity, Vector3.zero, ref acceleration, _smoothTime, maxAcceleration, deltaTime);
+                _velocity = Vector3.SmoothDamp(_velocity, Vector3.zero, ref acceleration, _config.DecelerationTime, maxAcceleration, deltaTime);
                 yield return null;
             }
             
