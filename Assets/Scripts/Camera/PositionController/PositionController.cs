@@ -85,11 +85,6 @@ namespace Camera
             
             _transitionCoroutine = null;
         }
-        
-        private bool IsInsideBounds()
-        {
-            return _cameraBounds.IsInsideBounds(CameraPosition, _camera.OrthographicSize);
-        }
 
         private void LogInfo(string message)
         {

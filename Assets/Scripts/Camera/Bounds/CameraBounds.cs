@@ -7,27 +7,13 @@ namespace Camera
         [SerializeField] private Vector2 size;
         [SerializeField] private Vector2 offset;
 
-        public override bool IsInsideBounds(Vector3 position, float orthographicSize)
-        {
-            var cameraHalfWidth = orthographicSize * Screen.width / Screen.height;
-            var positionX = position.x;
-            var positionY = position.y;
-            
-            var isIntersectingLeft = positionX - cameraHalfWidth < Left;
-            var isIntersectingRight = positionX + cameraHalfWidth > Right;
-            var isIntersectingTop = positionY + orthographicSize > Top;
-            var isIntersectingBottom = positionY - orthographicSize < Bottom;
-            
-            return !isIntersectingLeft && !isIntersectingRight && !isIntersectingTop && !isIntersectingBottom;
-        }
-        
-        private float Left => transform.position.x + offset.x - size.x / 2;
-        
-        private float Right => transform.position.x + offset.x + size.x / 2;
-        
-        private float Top => transform.position.y + offset.y + size.y / 2;
-        
-        private float Bottom => transform.position.y + offset.y - size.y / 2;
+        public override float Left => transform.position.x + offset.x - size.x / 2;
+
+        public override float Right => transform.position.x + offset.x + size.x / 2;
+
+        public override float Top => transform.position.y + offset.y + size.y / 2;
+
+        public override float Bottom => transform.position.y + offset.y - size.y / 2;
         
         private void OnDrawGizmos()
         {
