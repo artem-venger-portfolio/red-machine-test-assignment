@@ -8,6 +8,7 @@ namespace Camera
     public class CameraMover : MonoBehaviour
     {
         [SerializeField] private CameraConfigSO cameraConfigSO;
+        [SerializeField] private CameraBoundsBase cameraBounds;
 
         private CameraBase _camera;
         private IInputWatcher _inputWatcher;
@@ -22,7 +23,7 @@ namespace Camera
             _inputWatcher.DragDeltaChanged += DragDeltaChangedEventHandler;
             _inputWatcher.DragEnded += DragEndedEventHandler;
             _inputWatcher.Initialize();
-            _positionController = new PositionController(_camera, Coroutines.Instance, cameraConfigSO);
+            _positionController = new PositionController(_camera, Coroutines.Instance, cameraConfigSO, cameraBounds);
         }
         
         private void DragStartedEventHandler()

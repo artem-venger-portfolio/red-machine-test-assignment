@@ -14,6 +14,8 @@ namespace Camera
             set => transform.position = value;
         }
 
+        public override float OrthographicSize => _camera.orthographicSize;
+
         private void Awake()
         {
             _camera = GetComponent<UnityCamera>();

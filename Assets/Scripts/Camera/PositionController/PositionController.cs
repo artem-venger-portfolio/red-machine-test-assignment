@@ -9,16 +9,19 @@ namespace Camera
     {
         private readonly Coroutines _coroutineManager;
         private readonly ICameraConfig _config;
+        private readonly CameraBoundsBase _cameraBounds;
         private readonly CameraBase _camera;
         private Coroutine _transitionCoroutine;
         private Vector3 _targetPosition;
         private Vector3 _velocity;
 
-        public PositionController(CameraBase camera, Coroutines coroutineManager, ICameraConfig config)
+        public PositionController(CameraBase camera, Coroutines coroutineManager, ICameraConfig config, 
+            CameraBoundsBase cameraBounds)
         {
             _camera = camera;
             _coroutineManager = coroutineManager;
             _config = config;
+            _cameraBounds = cameraBounds;
         }
 
         public void StartTransition()
@@ -81,6 +84,11 @@ namespace Camera
             }
             
             _transitionCoroutine = null;
+        }
+        
+        private bool IsInsideBounds()
+        {
+            return _cameraBounds.IsInsideBounds(CameraPosition, _camera.OrthographicSize);
         }
 
         private void LogInfo(string message)
