@@ -2,6 +2,7 @@ using System;
 using Player;
 using Player.ActionHandlers;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Utils;
 
 namespace Camera
@@ -40,7 +41,7 @@ namespace Camera
         
         private void OnDragStart(Vector3 startPosition)
         {
-            if (IsConnecting)
+            if (IsConnecting || EventSystem.current.IsPointerOverGameObject())
                 return;
             
             IsDragging = true;
