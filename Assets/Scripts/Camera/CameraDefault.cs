@@ -25,10 +25,5 @@ namespace Camera
         {
             return _camera.ScreenToWorldPoint(position);
         }
-
-        public override Vector3 WorldToViewportPoint(Vector3 position)
-        {
-            return _camera.WorldToViewportPoint(position);
-        }
     }
 }
