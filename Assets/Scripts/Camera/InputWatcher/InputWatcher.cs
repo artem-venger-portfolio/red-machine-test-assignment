@@ -10,7 +10,6 @@ namespace Camera
     public class InputWatcher : IInputWatcher
     {
         private readonly ClickHandler _clickHandler;
-        private Vector3 _targetPosition;
         private Vector3 _startPosition;
         private bool _isDragging;
 
